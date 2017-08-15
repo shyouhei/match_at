@@ -29,12 +29,33 @@ static VALUE match_at(VALUE RB_UNUSED_VAR(mod), VALUE str, VALUE rexp, VALUE pos
 static VALUE match_at_p(VALUE RB_UNUSED_VAR(mod), VALUE str, VALUE rexp, VALUE pos);
 static bool do_match(VALUE str, VALUE rexp, VALUE pos, OnigRegion *region);
 
+/**
+ * Match the rexp  against str's position pos.  This is  lightweight because no
+ * MatchData is allocated.
+ *
+ * @param str  [String]  target string.
+ * @param rexp [Regexp]  pattern to match.
+ * @param pos  [Integer] str's index, in character.
+ * @return     [true]    successful match.
+ * @return     [false]   failure in match.
+ */
 VALUE
 match_at_p(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
 {
     return do_match(str, rexp, pos, NULL) ? Qtrue : Qfalse;
 }
 
+/**
+ * Try to  construct a  MatchData at  str's pos  position.  If  that's possible
+ * return the allocated MatchData.  Otherwise, returns nil.
+ *
+ * @note  It does not update `$~`.
+ * @param str  [String]    target string.
+ * @param rexp [Regexp]    pattern to match.
+ * @param pos  [Integer]   str's index, in character.
+ * @return     [MatchData] successful match.
+ * @return     [nil]       failure in match.
+ */
 VALUE
 match_at(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
 {
@@ -61,11 +82,7 @@ match_at(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
 }
 
 bool
-do_match(
-    VALUE vstr,
-    VALUE vreg,
-    VALUE vpos,
-    OnigRegion *region)
+do_match(VALUE vstr, VALUE vreg, VALUE vpos, OnigRegion *region)
 {
     const char *str;
     const char *end;
