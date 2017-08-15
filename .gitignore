@@ -26,6 +26,7 @@ Gemfile.lock
 coverage
 doc
 stackprof.dump
+pkg
 tmp
 vendor
 *.so
