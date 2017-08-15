@@ -24,4 +24,4 @@
 # SOFTWARE.
 
 require 'mkmf'
-create_makefile 'match_at'
+create_makefile 'match_at/match_at'
