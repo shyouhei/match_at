@@ -24,4 +24,4 @@
 # SOFTWARE.
 ;
 
-MatchAt::VERSION = 2
+MatchAt::VERSION = 3
