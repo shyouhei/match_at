@@ -93,15 +93,15 @@ class TC001_MatchAt < Test::Unit::TestCase
 
     sub_test_case '#match_at?' do
       data(
-        "empty"     => ['',       /foo/,  0, false],
-        "foobar,0"  => ['foobar', /o/,    0, false],
-        "foobar,1"  => ['foobar', /o/,    1, true],
-        "foobar,2"  => ['foobar', /o/,    2, true],
-        "foobar,3"  => ['foobar', /o/,    3, false],
-        "foobar,4"  => ['foobar', /o/,    4, false],
-        "foobar,-3" => ['foobar', /bar/, -3, false],
-        "\\A,0"     => ['foobar', /\A/,   0, true],
-        "\\A,1"     => ['foobar', /\A/,   1, false]
+        "empty"     => ['',       /foo/,  0, nil],
+        "foobar,0"  => ['foobar', /o/,    0, nil],
+        "foobar,1"  => ['foobar', /o/,    1, 1],
+        "foobar,2"  => ['foobar', /o/,    2, 1],
+        "foobar,3"  => ['foobar', /o/,    3, nil],
+        "foobar,4"  => ['foobar', /o/,    4, nil],
+        "foobar,-3" => ['foobar', /bar/, -3, nil],
+        "\\A,0"     => ['foobar', /\A/,   0, 0],
+        "\\A,1"     => ['foobar', /\A/,   1, nil]
       )
 
       test '#match_at?' do |(str, rexp, pos, expected)|
@@ -201,15 +201,15 @@ class TC001_MatchAt < Test::Unit::TestCase
 
     sub_test_case '#match_at?' do
       data(
-        "empty"     => ['',       /foo/,  0, false],
-        "foobar,0"  => ['foobar', /o/,    0, false],
-        "foobar,1"  => ['foobar', /o/,    1, true],
-        "foobar,2"  => ['foobar', /o/,    2, true],
-        "foobar,3"  => ['foobar', /o/,    3, false],
-        "foobar,4"  => ['foobar', /o/,    4, false],
-        "foobar,-3" => ['foobar', /bar/, -3, false],
-        "\\A,0"     => ['foobar', /\A/,   0, true],
-        "\\A,1"     => ['foobar', /\A/,   1, false]
+        "empty"     => ['',       /foo/,  0, nil],
+        "foobar,0"  => ['foobar', /o/,    0, nil],
+        "foobar,1"  => ['foobar', /o/,    1, 1],
+        "foobar,2"  => ['foobar', /o/,    2, 1],
+        "foobar,3"  => ['foobar', /o/,    3, nil],
+        "foobar,4"  => ['foobar', /o/,    4, nil],
+        "foobar,-3" => ['foobar', /bar/, -3, nil],
+        "\\A,0"     => ['foobar', /\A/,   0, 0],
+        "\\A,1"     => ['foobar', /\A/,   1, nil]
       )
 
       test '#match_at?' do |(str, rexp, pos, expected)|

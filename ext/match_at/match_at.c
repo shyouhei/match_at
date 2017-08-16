@@ -27,7 +27,7 @@
 
 static VALUE match_at(VALUE RB_UNUSED_VAR(mod), VALUE str, VALUE rexp, VALUE pos);
 static VALUE match_at_p(VALUE RB_UNUSED_VAR(mod), VALUE str, VALUE rexp, VALUE pos);
-static bool do_match(VALUE str, VALUE rexp, VALUE pos, OnigRegion *region);
+static OnigPosition do_match(VALUE str, VALUE rexp, VALUE pos, OnigRegion *region);
 
 /**
  * Match the rexp  against str's position pos.  This is  lightweight because no
@@ -42,7 +42,22 @@ static bool do_match(VALUE str, VALUE rexp, VALUE pos, OnigRegion *region);
 VALUE
 match_at_p(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
 {
-    return do_match(str, rexp, pos, NULL) ? Qtrue : Qfalse;
+    OnigPosition result = do_match(str, rexp, pos, NULL);
+
+    if (result >= 0) {
+        long n           = NUM2LONG(pos);
+        rb_encoding *enc = rb_enc_get(str);
+        const char *beg  = rb_string_value_ptr(&str);
+        const char *end  = RSTRING_END(str);
+        const char *ptr  = rb_enc_nth(beg, end, n, enc);
+        const char *term = &ptr[result];
+        long len         = rb_enc_strlen(ptr, term, enc);
+
+        return LONG2NUM(len);
+    }
+    else {
+        return Qnil;
+    }
 }
 
 /**
@@ -59,10 +74,11 @@ match_at_p(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
 VALUE
 match_at(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
 {
-    OnigRegion region = { 0 };
-    VALUE ret         = Qnil;
+    OnigRegion region   = { 0 };
+    VALUE ret           = Qnil;
+    OnigPosition result = do_match(str, rexp, pos, &region);
 
-    if (do_match(str, rexp, pos, &region)) {
+    if (result >= 0) {
         int err;
         ret = rb_funcall(rb_cMatch, rb_intern("allocate"), 0);
         err = rb_reg_region_copy(RMATCH_REGS(ret), &region);
@@ -81,7 +97,7 @@ match_at(VALUE mod, VALUE str, VALUE rexp, VALUE pos)
     return ret;
 }
 
-bool
+OnigPosition
 do_match(VALUE vstr, VALUE vreg, VALUE vpos, OnigRegion *region)
 {
     const char *str;
@@ -119,11 +135,8 @@ do_match(VALUE vstr, VALUE vreg, VALUE vpos, OnigRegion *region)
 	}
     }
 
-    if (result >= 0) {
-        return true;
-    }
-    else if (result == ONIG_MISMATCH) {
-        return false;
+    if ((result >= 0) || (result == ONIG_MISMATCH)) {
+        return result;
     }
     else {
         OnigUChar err[ONIG_MAX_ERROR_MESSAGE_LEN] = { 0 };
