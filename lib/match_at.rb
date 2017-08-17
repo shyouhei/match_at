@@ -94,30 +94,3 @@ module MatchAt
 end
 
 require 'match_at/match_at'
-
-__END__
-
-# Dialogue about regular expression matching at the beginning of a String:
-#
-# 2017/06/30 [14:50] @shyouhei onig_matchってなんでRuby側に出してないんだっけ
-# 2017/06/30 [15:00] @naruse   特に理由はない気がする
-# 2017/06/30 [15:00] @naruse   strscanみたいなの作るときに欲しいかもね
-# 2017/06/30 [15:08] @shyouhei もう少し詳しくいうと正規表現を引数にとって毎回 `/\A#{re}/.match(…)` とか書くみたいなアホっぽいことをするときに欲しくなる。
-# 2017/06/30 [15:08] @naruse   問題は名前だな
-# 2017/06/30 [15:09] @shyouhei Regexp#match(str, -1)とか
-# 2017/06/30 [15:09] @shyouhei -1はあんまりか
-# 2017/06/30 [15:09] @nobu     String#rindex(re, -1)
-# 2017/06/30 [15:10] @shyouhei match_at_the_beginning: true
-# 2017/06/30 [15:10] @naruse   -1は末尾以降でマッチに見える
-# 2017/06/30 [15:10] @nobu     引数間違えたかも
-# 2017/06/30 [15:10] @nobu     0だな
-# 2017/06/30 [15:11] @nobu     rindex(prefix, 0)はstart_with?ができるまではよく使ったidiom
-# 2017/06/30 [15:11] @naruse   0でも先頭以降でマッチっていう現在の挙動と同じに見えるよ
-# 2017/06/30 [15:11] @nobu     r
-# 2017/06/30 [15:12] @shyouhei なるほど?
-# 2017/06/30 [15:13] @naruse   ふむ?
-# 2017/06/30 [15:14] @naruse   それっぽい動きをしているな
-# 2017/06/30 [15:16] @naruse   idiomとしてはそれでよさそうだけど、start_with?で正規表現許した方がよさそうかな
-# 2017/06/30 [15:16] @shyouhei start_with?に正規表現はわかりやすくていいですね
-#
-# @see https://ruby.slack.com/archives/C02A3SL0U/p1498801851550590
